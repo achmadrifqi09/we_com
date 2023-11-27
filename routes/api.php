@@ -20,4 +20,5 @@ Route::get('/images', [ImageController::class, 'index']);
 Route::post('/images', [ImageController::class, 'create']);
 Route::delete('/images/{id}', [ImageController::class, 'destroy']);
 
-Route::post('/users', [UserController::class, 'signup']);
+Route::post('/users', [UserController::class, 'register']);
+Route::post('/users/login', [UserController::class, 'login']);
