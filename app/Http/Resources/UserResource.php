@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class UserResource extends JsonResource
 {
@@ -14,14 +15,19 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $resources = [
             'id' => $this->id,
             'name' => $this->name,
             'username' => $this->username,
             'email' => $this->email,
             'phone' => $this->phone,
             'avatar_id' => $this->avatar_id,
-            'token' => $this->token
         ];
+
+        if (!str_contains($request->url(), '/users/current') && !$request->isMethod('GET')) {
+            $resources['token'] = $this->token;
+        }
+
+        return $resources;
     }
 }
