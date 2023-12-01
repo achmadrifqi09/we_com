@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +19,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('/users/{id}', [UserController::class, 'getUser']);
-
     Route::get('/images', [ImageController::class, 'index']);
     Route::post('/images', [ImageController::class, 'create']);
     Route::delete('/images/{id}', [ImageController::class, 'destroy']);
@@ -28,6 +28,20 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/users/addresses', [AddressController::class, 'create']);
     Route::delete('/users/addresses/{id}', [AddressController::class, 'destroy']);
     Route::put('/users/addresses/{id}', [AddressController::class, 'update']);
+
+    Route::get('/users/logout', [UserController::class, 'logout']);
+    Route::get('/users/current', [UserController::class, 'get']);
+    Route::put('/users/current', [UserController::class, 'update']);
+    Route::post('/users/current/avatar', [UserController::class, 'updateAvatar']);
+    Route::put('/users/current/password', [UserController::class, 'updatePassword']);
+});
+
+Route::group(['middleware' => ['auth:api', 'administrator', 'owner']], function () {
+    Route::get('/categories', [CategoryController::class, 'list']);
+    Route::get('/categories/{id}', [CategoryController::class, 'get']);
+    Route::post('/categories', [CategoryController::class, 'create']);
+    Route::put('/categories/{id}', [CategoryController::class, 'update']);
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 });
 
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->uuid('avatar_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->uuid('role_id');
             $table->rememberToken();
             $table->timestamps();
         });
