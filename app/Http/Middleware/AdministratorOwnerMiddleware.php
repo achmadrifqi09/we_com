@@ -6,9 +6,10 @@ use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdministratorMiddleware
+class AdministratorOwnerMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,16 +19,17 @@ class AdministratorMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $roleId = Auth::user()->role_id;
-        if (Role::find($roleId)->name !== 'Administrator') {
-            return response()->json([
-                'errors' => [
-                    'message' => [
-                        'forbidden'
-                    ]
-                ]
-            ])->setStatusCode(403);
+
+        if (Role::find($roleId)->name == 'Administrator' || Role::find($roleId)->name == 'Owner') {
+            return $next($request);
         }
 
-        return $next($request);
+        return response()->json([
+            'errors' => [
+                'message' => [
+                    'forbidden'
+                ]
+            ]
+        ])->setStatusCode(403);
     }
 }
