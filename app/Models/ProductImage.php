@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
-class Category extends Model
+class ProductImage extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-    public $incrementing = false;
     protected $keyType = 'string';
+    public $incrementing = false;
 
     protected static function boot()
     {
@@ -23,8 +24,8 @@ class Category extends Model
         });
     }
 
-    public function product()
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'category_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }

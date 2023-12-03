@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
-class Category extends Model
+class Variant extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-    public $incrementing = false;
     protected $keyType = 'string';
+    public $incrementing = false;
 
     protected static function boot()
     {
@@ -23,8 +25,13 @@ class Category extends Model
         });
     }
 
-    public function product()
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'category_id', 'id');
+        return $this->belogsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function discount(): HasOne
+    {
+        return $this->hasOne(Discount::class, 'variant_id', 'id');
     }
 }

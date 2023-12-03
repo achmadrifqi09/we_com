@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('discounts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->text('description');
-            $table->uuid('category_id');
-            $table->bigInteger('amount_sold')->default(0);
-            $table->double('rating_average')->default(0);
-            $table->bigInteger('stock_total')->default(0);
+            $table->uuid('product_id');
+            $table->uuid('variant_id');
+            $table->integer('percentage');
+            $table->integer('max_order');
+            $table->timestamp('valid_date');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('discounts');
     }
 };
