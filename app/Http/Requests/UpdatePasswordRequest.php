@@ -33,7 +33,7 @@ class UpdatePasswordRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response([
-            'error' => $validator->getMessageBag()
+            'errors' => $validator->getMessageBag()
         ], 400));
     }
 }

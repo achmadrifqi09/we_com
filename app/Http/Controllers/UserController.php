@@ -84,6 +84,15 @@ class UserController extends Controller
     public function updateAvatar(ImageCreateRequest $request): UserResource
     {
         $user = User::find(Auth::user()->id);
+        if (!$user) {
+            throw new HttpResponseException(response([
+                'errors' => [
+                    'message' => [
+                        'not found'
+                    ]
+                ]
+            ]));
+        }
         $data = $request->validated();
         $avatar = Image::where('id', $user->avatar_id)->first();
 
