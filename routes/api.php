@@ -10,6 +10,7 @@ use App\Http\Controllers\VariantController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PaymentMethodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,6 +89,12 @@ Route::group(['middleware' => ['auth:api', 'administrator_owner']], function () 
     Route::get('/products/{productId}/discounts', [DiscountController::class, 'list']);
     Route::get('/products/{productId}/discounts/{discountId}', [DiscountController::class, 'get']);
     Route::delete('/products/{productId}/discounts/{discountId}', [DiscountController::class, 'destroy']);
+
+    Route::post('/payment-methods', [PaymentMethodController::class, 'create']);
+    Route::put('/payment-methods/{id}', [PaymentMethodController::class, 'update']);
+    Route::get('/payment-methods', [PaymentMethodController::class, 'list']);
+    Route::get('/payment-methods/{id}', [PaymentMethodController::class, 'get']);
+    Route::delete('/payment-methods/{id}', [PaymentMethodController::class, 'destroy']);
 });
 
 Route::post('/users', [UserController::class, 'register']);
