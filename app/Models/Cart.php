@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
-class Variant extends Model
+class Cart extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
@@ -27,16 +26,16 @@ class Variant extends Model
 
     public function product(): BelongsTo
     {
-        return $this->belogsTo(Product::class, 'product_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    public function discount(): HasOne
+    public function user(): BelongsTo
     {
-        return $this->hasOne(Discount::class, 'variant_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function cart(): HasOne
+    public function variant(): BelongsTo
     {
-        return $this->hasOne(Cart::class, 'variant_id', 'id');
+        return $this->belongsTo(Variant::class, 'variant_id', 'id');
     }
 }
