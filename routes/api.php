@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VariantController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/products/{productId}/variants', [
         VariantController::class, 'list'
     ]);
+
+    Route::post('/carts', [CartController::class, 'create']);
+    Route::get('/carts/{id}', [CartController::class, 'get']);
+    Route::get('/carts', [CartController::class, 'list']);
+    Route::patch('/carts/{id}', [CartController::class, 'updateQuantity']);
+    Route::delete('/carts/{id}', [CartController::class, 'destroy']);
 });
 
 Route::group(['middleware' => ['auth:api', 'administrator_owner']], function () {
