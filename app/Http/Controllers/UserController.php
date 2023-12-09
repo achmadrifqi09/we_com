@@ -16,11 +16,55 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
-use Illuminate\Support\Facades\Log;
+use Exception;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
 {
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+            $userGoogle = Socialite::driver('google')->user();
+            $user = User::where('email', $userGoogle->email)->first();
+
+            if (!$user) {
+                return response([
+                    'data' => [
+                        'name' => $userGoogle->getName(),
+                        'username' => $userGoogle->getNickname(),
+                        'email' => $userGoogle->getEmail()
+                    ]
+                ])->setStatusCode(404);
+            }
+
+            $user['google_id'] = $userGoogle->id;
+            $token = $user->createToken(env("APP_SECRET_KEY"))->accessToken;
+            $user->save();
+
+            return response([
+                'data' => [
+                    'id' => $user->id,
+                    'email' => $user->email,
+                    'token' => $token
+                ]
+            ])->setStatusCode(200);
+        } catch (Exception $e) {
+            return response([
+                'errors' => [
+                    'message' => [
+                        'internal serer error'
+                    ]
+                ]
+            ])->setStatusCode(500);
+        }
+    }
+
     public function register(UserSignupRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
@@ -64,8 +108,6 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $user = User::find(Auth::user()->id);
-
-        Log::info($user);
 
         if (User::where('email', '!=', $user['email'])->where('email', $data['email'])->count() === 1) {
             throw new HttpResponseException(response([

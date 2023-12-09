@@ -99,3 +99,6 @@ Route::group(['middleware' => ['auth:api', 'administrator_owner']], function () 
 
 Route::post('/users', [UserController::class, 'register']);
 Route::post('/users/login', [UserController::class, 'login']);
+
+Route::get('/users/auth/google', [UserController::class, 'redirectToGoogle']);
+Route::get('/users/auth/callback', [UserController::class, 'handleGoogleCallback']);
