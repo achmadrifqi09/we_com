@@ -10,7 +10,9 @@ use App\Http\Controllers\VariantController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\DeliveryServiceController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\ShippingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +57,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/carts', [CartController::class, 'list']);
     Route::patch('/carts/{id}', [CartController::class, 'updateQuantity']);
     Route::delete('/carts/{id}', [CartController::class, 'destroy']);
+
+    Route::get('/delivery-services/{id}', [DeliveryServiceController::class, 'get']);
+    Route::get('/delivery-services', [DeliveryServiceController::class, 'list']);
+
+    Route::post('/shippings',  [ShippingController::class, 'create']);
+    Route::get('/shippings/{id}',  [ShippingController::class, 'get']);
 });
 
 Route::group(['middleware' => ['auth:api', 'administrator_owner']], function () {
@@ -95,6 +103,13 @@ Route::group(['middleware' => ['auth:api', 'administrator_owner']], function () 
     Route::get('/payment-methods', [PaymentMethodController::class, 'list']);
     Route::get('/payment-methods/{id}', [PaymentMethodController::class, 'get']);
     Route::delete('/payment-methods/{id}', [PaymentMethodController::class, 'destroy']);
+
+    Route::post('/delivery-services', [DeliveryServiceController::class, 'create']);
+    Route::put('/delivery-services/{id}', [DeliveryServiceController::class, 'update']);
+    Route::delete('/delivery-services/{id}', [DeliveryServiceController::class, 'destroy']);
+
+    Route::patch('/shippings/{id}',  [ShippingController::class, 'update']);
+    Route::delete('/shippings/{id}',  [ShippingController::class, 'destroy']);
 });
 
 Route::post('/users', [UserController::class, 'register']);
